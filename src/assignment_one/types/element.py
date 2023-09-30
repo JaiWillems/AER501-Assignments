@@ -1,44 +1,31 @@
 import math
 
 from src.assignment_one.types.node import Node
+from src.assignment_one.validator import Validator
 
 
 class Element:
 
-    def __init__(
-            self,
-            left_node: Node,
-            right_node: Node,
-            e: float,
-            a: float,
-            number: int
-    ) -> None:
+    def __init__(self, left_node: Node, right_node: Node, elasticity: float,
+                 area: float) -> None:
         """Truss element.
 
         :param left_node: First node of the truss element.
         :type left_node: Node
         :param right_node: Second node of the truss element.
         :type right_node: Node
-        :param e: Young's modulus in N/m^2.
-        :type e: float
-        :param a: Cross sectional area of element in m^2.
-        :type a: float
-        :param number: Unique global element number.
-        :type number: int
+        :param elasticity: Young's modulus in N/m^2.
+        :type elasticity: float
+        :param area: Cross sectional area of element in m^2.
+        :type area: float
         """
-        self._validate_nodes(left_node, right_node)
+        Validator.assert_element_has_non_zero_width(left_node, right_node)
+        Validator.assert_node_order(left_node, right_node)
 
         self._left_node = left_node
         self._right_node = right_node
-        self._E = e
-        self._A = a
-        self._number = number
-
-    def _validate_nodes(self, left_node, right_node):
-        if left_node.distance_to(right_node) == 0:
-            raise ValueError("Cannot define zero width element.")
-        if left_node.x() > right_node.x():
-            raise ValueError("left_node is to the right of the right_node.")
+        self._elasticity = elasticity
+        self._area = area
 
     def left_node(self) -> Node:
         return self._left_node
@@ -46,14 +33,11 @@ class Element:
     def right_node(self) -> Node:
         return self._right_node
 
-    def youngs_modulus(self) -> float:
-        return self._E
+    def elasticity(self) -> float:
+        return self._elasticity
 
     def cross_sectional_area(self) -> float:
-        return self._A
-
-    def number(self) -> int:
-        return self._number
+        return self._area
 
     def length(self) -> float:
         """Get length of the element.
@@ -70,34 +54,10 @@ class Element:
         :rtype: float
 
         ..note:: The inclination is the angle between the element and the
-            horizontal where a positive inclination corresponds to the right
+            horizontal where area positive inclination corresponds to the right
             node being higher than the left node.
         """
         return math.atan2(
             self._right_node.y() - self._left_node.y(),
             self._right_node.x() - self._left_node.x()
         )
-
-    def stiffness(self) -> float:
-        """Get the element stiffness.
-
-        :return: Element stiffness in base SI units.
-        :rtype: float
-        """
-        return self._E * self._A / self.length()
-
-    def stiffness_matrix(self) -> list:
-        """Get the element stiffness matrix.
-
-        :return: Element stiffness matrix in base SI units.
-        :rtype: list
-        """
-        k = self.stiffness()
-        l = math.cos(self.incline())
-        m = math.sin(self.incline())
-        return [
-            [k * l * l, k * l * m, -k * l * l, -k * l * m],
-            [k * l * m, k * m * m, -k * l * m, -k * m * m],
-            [-k * l * l, -k * l * m, k * l * l, k * l * m],
-            [-k * l * m, -k * m * m, k * l * m, k * m * m]
-        ]
