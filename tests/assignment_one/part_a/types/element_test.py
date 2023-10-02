@@ -1,8 +1,8 @@
 import math
 from unittest import TestCase
 
-from src.assignment_one.types.element import Element
-from src.assignment_one.types.node import Node
+from src.assignment_one.part_a.types.element import Element
+from src.assignment_one.part_a.types.node import Node
 
 
 class ElementTest(TestCase):

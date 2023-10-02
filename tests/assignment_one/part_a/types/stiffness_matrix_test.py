@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from src.assignment_one.types.stiffness_matrix import StiffnessMatrix
+from src.assignment_one.part_a.types.stiffness_matrix import StiffnessMatrix
 
 
 class StiffnessMatrixTest(TestCase):

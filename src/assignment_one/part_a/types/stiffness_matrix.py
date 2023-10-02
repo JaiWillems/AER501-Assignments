@@ -1,7 +1,7 @@
 import math
 
-from src.assignment_one.validator import Validator
-from src.assignment_one.types.element import Element
+from src.assignment_one.part_a.utils.validator import Validator
+from src.assignment_one.part_a.types.element import Element
 
 
 class StiffnessMatrix:
@@ -11,7 +11,7 @@ class StiffnessMatrix:
 
         :param nodes: Nodes corresponding to the value entries.
         :type: list.
-        :param values: Stiffness matrix values.
+        :param values: Stiffness matrix local_matrix.
         :type: list.
         """
         Validator.assert_square_matrix(values)

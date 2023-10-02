@@ -1,13 +1,18 @@
 import math
 
-from src.assignment_one.types.node import Node
-from src.assignment_one.validator import Validator
+from src.assignment_one.part_a.types.node import Node
+from src.assignment_one.part_a.utils.validator import Validator
 
 
 class Element:
 
-    def __init__(self, left_node: Node, right_node: Node, elasticity: float,
-                 area: float) -> None:
+    def __init__(
+            self,
+            left_node: Node,
+            right_node: Node,
+            elasticity: float,
+            area: float
+    ) -> None:
         """Truss element.
 
         :param left_node: First node of the truss element.
