@@ -1,4 +1,5 @@
 from src.assignment_one.part_a.solver.displacement_solver import DisplacementSolver
+from src.assignment_one.part_a.solver.post_processer import PostProcessor
 from src.assignment_one.part_a.types.global_stiffness_matrix_builder import \
     GlobalStiffnessMatrixBuilder
 from src.assignment_one.part_a.types.stiffness_matrix import StiffnessMatrix
@@ -7,13 +8,13 @@ from src.assignment_one.part_a.types.stiffness_matrix import StiffnessMatrix
 class Solver:
 
     @staticmethod
-    def solve(elements: list) -> dict:
+    def solve(elements: list) -> tuple:
         """Solve the truss defined by a list of elements.
 
         :param elements: List of elements forming the truss.
         :type elements: list.
-        :return: Dictionary relating the nodes to their displacements.
-        :rtype: dict.
+        :return: Tuple containing displacements, strains, and stresses.
+        :rtype: tuple.
         """
         builder = GlobalStiffnessMatrixBuilder(
             Solver._get_unique_nodes(elements)
@@ -24,7 +25,11 @@ class Solver:
             )
         global_stiffness_matrix = builder.build()
 
-        return DisplacementSolver.solve(global_stiffness_matrix)
+        displacements = DisplacementSolver.solve(global_stiffness_matrix)
+        strains = PostProcessor.calculate_strains(elements, displacements)
+        stresses = PostProcessor.calculate_stresses(elements, strains)
+
+        return displacements, strains, stresses
 
     @staticmethod
     def _get_unique_nodes(elements: list) -> list:
