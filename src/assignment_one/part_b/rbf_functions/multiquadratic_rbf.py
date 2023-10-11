@@ -1,10 +1,10 @@
 import abc
 import math
 
-from src.assignment_one.part_b.rbf_functions.rbf_function import RbfFunction
+from src.assignment_one.part_b.rbf_functions.rbf import Rbf
 
 
-class MultiquadraticRbf(abc.ABC, RbfFunction):
+class MultiquadraticRbf(abc.ABC, Rbf):
 
     def evaluate(self, x: float, c: float, sigma: float) -> float:
         """Evaluate the RBF with the given parameters.

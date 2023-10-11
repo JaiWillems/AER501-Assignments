@@ -1,7 +1,7 @@
 import abc
 
 
-class RbfFunction(metaclass=abc.ABCMeta):
+class Rbf(metaclass=abc.ABCMeta):
     """Framework for Radial Basis Functions."""
 
     @classmethod
