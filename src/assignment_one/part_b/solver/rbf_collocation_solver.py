@@ -21,7 +21,7 @@ class RbfCollocationSolver:
         :type domain: list.
         :param n: Number of collocation points.
         :type n: int.
-        :param rbf: Radial basis function for the solution.
+        :param rbf: Radial basis function for the gaussian_solution.
         :type Rbf.
         :param sigma: RBF width parameter.
         :type sigma: float.
@@ -59,8 +59,21 @@ class RbfCollocationSolver:
         :return: List of collocation points.
         :rtype: list.
         """
-        step_size = (domain[1] - domain[0]) / (n - 1)
+        step_size = RbfCollocationSolver.step_size(domain, n)
         return [i * step_size for i in range(n)]
+
+    @staticmethod
+    def step_size(domain, n):
+        """Calculate step-size.
+
+        :param domain: Two element list containing the domain start and end.
+        :type domain: list.
+        :param n: Number of collocation points.
+        :type n: int.
+        :return: Step size.
+        :rtype: float.
+        """
+        return (domain[1] - domain[0]) / (n - 1)
 
     @staticmethod
     def _dynamics_matrix(

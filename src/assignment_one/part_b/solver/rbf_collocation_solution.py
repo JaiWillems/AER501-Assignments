@@ -3,13 +3,18 @@ from src.assignment_one.part_b.rbf_functions.rbf import Rbf
 
 class RbfCollocationSolution:
 
-    def __init__(self, coefficients: list, rbf: Rbf, center_points: list,
-                 sigma: float) -> None:
+    def __init__(
+            self,
+            coefficients: list,
+            rbf: Rbf,
+            center_points: list,
+            sigma: float
+    ) -> None:
         """Solution to the RBF collocation method.
 
-        :param coefficients: List of solution coefficients.
+        :param coefficients: List of gaussian_solution coefficients.
         :type coefficients: list.
-        :param rbf: Radial basis function for the solution.
+        :param rbf: Radial basis function for the gaussian_solution.
         :type rbf: Rbf.
         :param center_points: List of basis function center points.
         :type center_points: list.
@@ -24,9 +29,9 @@ class RbfCollocationSolution:
     def evaluate(self, x: list) -> list:
         """Evaluate the solution at multiple points in the solution domain.
 
-        :param x: List of domain points to evaluate the solution at.
+        :param x: List of domain points to evaluate the gaussian_solution at.
         :type x: list.
-        :return: Evaluated solution points.
+        :return: Evaluated gaussian_solution points.
         :rtype: list.
         """
         return [self._evaluate_single_point(xi) for xi in x]
@@ -34,9 +39,9 @@ class RbfCollocationSolution:
     def _evaluate_single_point(self, x: float) -> float:
         """Evaluate the solution at a single point in the solution domain.
 
-        :param x: Domain point to evaluate the solution at.
+        :param x: Domain point to evaluate the gaussian_solution at.
         :type x: float.
-        :return: Evaluated solution point.
+        :return: Evaluated gaussian_solution point.
         :rtype: float.
         """
         evaluated_point = 0
