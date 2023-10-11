@@ -60,7 +60,7 @@ class RbfCollocationSolver:
         :rtype: list.
         """
         step_size = RbfCollocationSolver.step_size(domain, n)
-        return [i * step_size for i in range(n)]
+        return [domain[0] + i * step_size for i in range(n)]
 
     @staticmethod
     def step_size(domain, n):
