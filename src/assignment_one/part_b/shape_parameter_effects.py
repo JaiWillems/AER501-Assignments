@@ -1,12 +1,10 @@
 import matplotlib.pyplot as plt
 
-from src.assignment_one.part_b.solver.rbf_collocation_solver import \
-    RbfCollocationSolver
 from src.assignment_one.part_b.solver.utils import collocation_solutions, \
     linearly_spaced_points, actual_solution, calculate_l2_error
 
-NUMBER_OF_COLLOCATION_POINTS = 7
-SHAPE_PARAMETERS = linearly_spaced_points([1e-5, 0.1], 1000)
+NUMBER_OF_COLLOCATION_POINTS = 4
+SHAPE_PARAMETERS = linearly_spaced_points([1e-5, 0.1], 100)
 DOMAIN = [0, 1]
 NUMBER_OF_X_VALS = 100
 

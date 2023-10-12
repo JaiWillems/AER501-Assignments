@@ -5,7 +5,7 @@ from src.assignment_one.part_b.solver.rbf_collocation_solver import \
 from src.assignment_one.part_b.solver.utils import collocation_solutions, \
     linearly_spaced_points, actual_solution, calculate_l2_error
 
-NUMBER_OF_COLLOCATION_POINTS = linearly_spaced_points([2, 20], 19)
+NUMBER_OF_COLLOCATION_POINTS = linearly_spaced_points([2, 30], 29)
 DOMAIN = [0, 1]
 NUMBER_OF_X_VALS = 100
 
@@ -31,7 +31,7 @@ for n in NUMBER_OF_COLLOCATION_POINTS:
 plt.plot(step_size, gaussian_error, label="Gaussian RBF")
 plt.plot(step_size, multiquadratic_error, label="Multiquadratic RBF")
 plt.title("Convergence")
-plt.xlabel("Number of Collocation Points")
+plt.xlabel("Step Size")
 plt.ylabel("L2 Norm of Approximation Error")
 plt.legend()
 plt.grid()

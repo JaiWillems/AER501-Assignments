@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from src.assignment_one.part_b.solver.utils import \
     collocation_solutions, linearly_spaced_points, actual_solution
 
-NUMBER_OF_COLLOCATION_POINTS = 4
+NUMBER_OF_COLLOCATION_POINTS = 7
 DOMAIN = [0, 1]
 NUMBER_OF_X_VALS = 100
 
