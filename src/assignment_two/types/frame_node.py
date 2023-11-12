@@ -12,8 +12,8 @@ class FrameNode:
 
         :param x: X-coordinate of node.
         :param y: Y-coordinate of node.
-        :param constrained: True if the node is constrained, False by default.
-            All degrees of freedom for constrained nodes are assumed inactive.
+        :param constrained: True if the node is is_constrained, False by default.
+            All degrees of freedom for is_constrained nodes are assumed inactive.
         """
         self._x = x
         self._y = y
@@ -24,3 +24,6 @@ class FrameNode:
 
     def y(self) -> float:
         return self._y
+
+    def is_constrained(self) -> bool:
+        return self._constrained
