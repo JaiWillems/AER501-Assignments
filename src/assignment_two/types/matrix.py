@@ -18,40 +18,45 @@ class Matrix:
     def values(self) -> list:
         return self._values
 
-    def partition_matrix(self) -> list:
-        """Partition the matrix for unconstrained nodes.
+    def partition_matrix(self) -> 'Matrix':
+        """Partition the matrix to not contain constrained nodes.
 
         :return: Partitioned matrix.
         """
-        partitioned_matrix = self._values.copy()
-        reversed_nodes = self._nodes.copy()
-        reversed_nodes.reverse()
+        return Matrix(
+            self._get_unconstrained_nodes(),
+            self._remove_values_by_indices(
+                self._get_matrix_indices_for_nodes(
+                    self._get_constrained_nodes()
+                )
+            )
+        )
 
-        # Remove constrained columns.
-        for row in partitioned_matrix:
-            for node in reversed_nodes:
-                if node.is_constrained():
-                    node_index = self._get_node_index(node)
-                    row.pop(node_index)
-                    row.pop(node_index)
-                    row.pop(node_index)
+    def _get_constrained_nodes(self) -> list:
+        return list(filter(lambda node: node.is_constrained(), self._nodes))
 
-        # Remove constrained rows.
-        for node in reversed_nodes:
-            if node.is_constrained():
-                node_index = self._get_node_index(node)
-                partitioned_matrix.pop(node_index)
-                partitioned_matrix.pop(node_index)
-                partitioned_matrix.pop(node_index)
+    def _get_unconstrained_nodes(self) -> list:
+        return list(filter(lambda node: not node.is_constrained(), self._nodes))
 
-        return partitioned_matrix
-
-    def _get_active_dof_indices(self):
+    def _get_matrix_indices_for_nodes(self, nodes: list) -> list:
         indices = []
-        for i, node in enumerate(self._nodes):
-            if not node.is_constrained():
-                indices.extend([3 * i, 3 * i + 1, 3 * i + 2])
+        for node in nodes:
+            indices.extend(self._get_matrix_indices_for_node(node))
         return indices
 
-    def _get_node_index(self, node: FrameNode) -> int:
-        return 3 * self._nodes.index(node)
+    def _get_matrix_indices_for_node(self, node: FrameNode) -> list:
+        node_index = 3 * self._nodes.index(node)
+        return [node_index, node_index + 1, node_index + 2]
+
+    def _remove_values_by_indices(self, removal_indices):
+        partitioned_matrix = self._values.copy()
+        decreasing_indices = sorted(removal_indices, reverse=True)
+
+        for row in partitioned_matrix:
+            for i in decreasing_indices:
+                row.pop(i)
+
+        for i in decreasing_indices:
+            partitioned_matrix.pop(i)
+
+        return partitioned_matrix

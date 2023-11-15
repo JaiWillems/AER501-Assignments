@@ -15,8 +15,8 @@ class FreeVibrationSolver:
         :return: The free-vibration analysis results.
         """
         eigenvalues, mode_shapes = FreeVibrationSolver._solve_generalized_eigenvalue_problem(
-            mesh.stiffness_matrix().partition_matrix(),
-            mesh.mass_matrix().partition_matrix(),
+            mesh.stiffness_matrix().partition_matrix().values(),
+            mesh.mass_matrix().partition_matrix().values(),
             number_of_modes
         )
         natural_frequencies = FreeVibrationSolver._convert_to_hertz(
