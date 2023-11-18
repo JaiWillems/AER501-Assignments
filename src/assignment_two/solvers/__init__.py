@@ -1,2 +1,3 @@
 from src.assignment_two.solvers.free_vibration_solver import FreeVibrationSolver
 from src.assignment_two.solvers.forced_vibration_full_order_solver import ForcedVibrationFullOrderSolver
+from src.assignment_two.solvers.forced_vibration_modal_analysis_solver import ForcedVibrationModalAnalysisSolver

@@ -19,68 +19,37 @@ class Mesh:
 
         :return: Global mass matrix.
         """
-
-        nodes = self._unique_nodes()
-        values = zero_filled_matrix(3 * self._number_of_nodes())
-
-        for element in self._elements:
-
-            element_matrix = element.mass_matrix()
-            local_values = element_matrix.values()
-
-            for row_node in element_matrix.nodes():
-
-                local_row = 3 * element_matrix.nodes().index(row_node)
-                global_row = 3 * nodes.index(row_node)
-
-                for column_node in element_matrix.nodes():
-                    local_column = 3 * element_matrix.nodes().index(column_node)
-                    global_column = 3 * nodes.index(column_node)
-
-                    values[global_row][global_column] += local_values[
-                        local_row][local_column]
-                    values[global_row][global_column + 1] += local_values[
-                        local_row][local_column + 1]
-                    values[global_row][global_column + 2] += local_values[
-                        local_row][local_column + 2]
-
-                    values[global_row + 1][global_column] += local_values[
-                        local_row + 1][local_column]
-                    values[global_row + 1][global_column + 1] += local_values[
-                        local_row + 1][local_column + 1]
-                    values[global_row + 1][global_column + 2] += local_values[
-                        local_row + 1][local_column + 2]
-
-                    values[global_row + 2][global_column] += local_values[
-                        local_row + 2][local_column]
-                    values[global_row + 2][global_column + 1] += local_values[
-                        local_row + 2][local_column + 1]
-                    values[global_row + 2][global_column + 2] += local_values[
-                        local_row + 2][local_column + 2]
-
-        return Matrix(nodes, values)
+        element_matrices = [element.mass_matrix() for element in self._elements]
+        return Matrix(
+            self.nodes(),
+            Mesh._generate_global_matrix(self.nodes(), element_matrices)
+        )
 
     def stiffness_matrix(self) -> Matrix:
         """Generate the global stiffness matrix for the mesh.
 
         :return: Global stiffness matrix.
         """
+        element_matrices = [element.stiffness_matrix() for element in self._elements]
+        return Matrix(
+            self.nodes(),
+            Mesh._generate_global_matrix(self.nodes(), element_matrices)
+        )
 
-        nodes = self._unique_nodes()
-        values = zero_filled_matrix(3 * self._number_of_nodes())
+    @staticmethod
+    def _generate_global_matrix(nodes: list, matrices: list) -> list:
+        values = zero_filled_matrix(3 * len(nodes))
+        for matrix in matrices:
 
-        for element in self._elements:
+            local_values = matrix.values()
 
-            stiffness_matrix = element.stiffness_matrix()
-            local_values = stiffness_matrix.values()
+            for row_node in matrix.nodes():
 
-            for row_node in stiffness_matrix.nodes():
-
-                local_row = 3 * stiffness_matrix.nodes().index(row_node)
+                local_row = 3 * matrix.nodes().index(row_node)
                 global_row = 3 * nodes.index(row_node)
 
-                for column_node in stiffness_matrix.nodes():
-                    local_column = 3 * stiffness_matrix.nodes().index(column_node)
+                for column_node in matrix.nodes():
+                    local_column = 3 * matrix.nodes().index(column_node)
                     global_column = 3 * nodes.index(column_node)
 
                     values[global_row][global_column] += local_values[
@@ -104,9 +73,9 @@ class Mesh:
                     values[global_row + 2][global_column + 2] += local_values[
                         local_row + 2][local_column + 2]
 
-        return Matrix(nodes, values)
+        return values
 
-    def _unique_nodes(self):
+    def nodes(self) -> list:
         unique_nodes = []
         for element in self._elements:
             if element.node_one() not in unique_nodes:
@@ -115,5 +84,9 @@ class Mesh:
                 unique_nodes.append(element.node_two())
         return unique_nodes
 
-    def _number_of_nodes(self):
-        return len(self._unique_nodes())
+    def unconstrained_nodes(self) -> list:
+        unconstrained_nodes = []
+        for node in self.nodes():
+            if not node.is_constrained():
+                unconstrained_nodes.append(node)
+        return unconstrained_nodes

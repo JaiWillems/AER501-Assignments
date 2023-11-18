@@ -9,10 +9,10 @@ class ForcedVibrationFullOrderSolver:
 
     @staticmethod
     def solve(
-            mesh: Mesh,
-            frequency_hz: float,
-            stiffness_damping_factor: float,
-            mass_damping_factor: float
+        mesh: Mesh,
+        frequency_hz: float,
+        stiffness_damping_factor: float,
+        mass_damping_factor: float
     ) -> ForcedVibrationResults:
         """Solve for the nodal displacements for a unit harmonic excitation.
 
@@ -53,10 +53,10 @@ class ForcedVibrationFullOrderSolver:
     @staticmethod
     @dispatch(Mesh, float, float, float)
     def _dynamic_stiffness_matrix(
-            mesh: Mesh,
-            frequency_hz: float,
-            stiffness_damping_factor: float,
-            mass_damping_factor: float
+        mesh: Mesh,
+        frequency_hz: float,
+        stiffness_damping_factor: float,
+        mass_damping_factor: float
     ) -> Matrix:
         nodes = mesh.mass_matrix().nodes()
         values = ForcedVibrationFullOrderSolver._dynamic_stiffness_matrix(
@@ -71,11 +71,11 @@ class ForcedVibrationFullOrderSolver:
     @staticmethod
     @dispatch(list, list, float, float, float)
     def _dynamic_stiffness_matrix(
-            stiffness_matrix: list,
-            mass_matrix: list,
-            angular_frequency: float,
-            stiffness_damping_factor: float,
-            mass_damping_factor: float
+        stiffness_matrix: list,
+        mass_matrix: list,
+        angular_frequency: float,
+        stiffness_damping_factor: float,
+        mass_damping_factor: float
     ) -> list:
         m = np.array(mass_matrix)
         k = np.array(stiffness_matrix)
