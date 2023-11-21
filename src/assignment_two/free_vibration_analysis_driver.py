@@ -1,11 +1,11 @@
+import numpy as np
+import matplotlib as mpl
 from matplotlib import pyplot as plt
 
 from src.assignment_two.mesh_cases import MeshCases
 from src.assignment_two.solvers import FreeVibrationSolver
 
-plt.style.use("seaborn-v0_8-muted")
-
-NUMBER_OF_MODES = 12
+NUMBER_OF_MODES = 13
 
 meshes = {
     "NELE=1": MeshCases.one_element_per_node(),
@@ -13,6 +13,9 @@ meshes = {
     "NELE=3": MeshCases.three_elements_per_node(),
     "NELE=4": MeshCases.four_elements_per_node()
 }
+
+cmap = plt.cm.Spectral(np.linspace(0.15, 0.85, len(meshes)))
+mpl.rcParams['axes.prop_cycle'] = mpl.cycler(color=cmap)
 
 mode_numbers = range(1, NUMBER_OF_MODES + 1)
 for plot_label, mesh in meshes.items():

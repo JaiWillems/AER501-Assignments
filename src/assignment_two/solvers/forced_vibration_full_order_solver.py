@@ -58,7 +58,6 @@ class ForcedVibrationFullOrderSolver:
         stiffness_damping_factor: float,
         mass_damping_factor: float
     ) -> Matrix:
-        nodes = mesh.mass_matrix().nodes()
         values = ForcedVibrationFullOrderSolver._dynamic_stiffness_matrix(
             mesh.stiffness_matrix().values(),
             mesh.mass_matrix().values(),
@@ -66,7 +65,7 @@ class ForcedVibrationFullOrderSolver:
             stiffness_damping_factor,
             mass_damping_factor
         )
-        return Matrix(nodes, values)
+        return Matrix(mesh.nodes(), values)
 
     @staticmethod
     @dispatch(list, list, float, float, float)
@@ -77,8 +76,8 @@ class ForcedVibrationFullOrderSolver:
         stiffness_damping_factor: float,
         mass_damping_factor: float
     ) -> list:
-        m = np.array(mass_matrix)
         k = np.array(stiffness_matrix)
+        m = np.array(mass_matrix)
         values = k - angular_frequency ** 2 * m + angular_frequency * 1j * (
                 stiffness_damping_factor * k + mass_damping_factor * m)
         return values.tolist()

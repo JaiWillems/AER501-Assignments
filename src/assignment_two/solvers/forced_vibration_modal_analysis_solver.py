@@ -53,7 +53,7 @@ class ForcedVibrationModalAnalysisSolver:
             stiffness_damping_factor
         )
 
-        nodal_displacement = list(np.dot(mode_shapes, modal_contribution_factors))
+        nodal_displacement = np.matmul(mode_shapes, modal_contribution_factors)
 
         return ForcedVibrationResults(
             ForcedVibrationModalAnalysisSolver._format_results(
@@ -72,13 +72,14 @@ class ForcedVibrationModalAnalysisSolver:
             stiffness_damping_factor: float
     ) -> list:
         modal_contribution_factors = []
-        for natural_frequency, mode_shape in zip(natural_frequencies, np.transpose(mode_shapes)):
+        free_response_iterator = zip(natural_frequencies, np.transpose(mode_shapes))
+        for natural_frequency_hz, mode_shape in free_response_iterator:
             modal_contribution_factors.append(
                 ForcedVibrationModalAnalysisSolver._modal_contribution_factor(
                     force_vector,
                     mode_shape,
-                    natural_frequency,
-                    excitation_frequency_rad_per_s,
+                    2 * np.pi * natural_frequency_hz,
+                    2 * np.pi * excitation_frequency_rad_per_s,
                     mass_damping_factor,
                     stiffness_damping_factor
                 )
@@ -89,14 +90,15 @@ class ForcedVibrationModalAnalysisSolver:
     def _modal_contribution_factor(
             force_vector: list,
             mode_shape: list,
-            natural_frequency: float,
+            natural_frequency_rad_per_s: float,
             excitation_frequency_rad_per_s: float,
             mass_damping_factor,
             stiffness_damping_factor: float
     ) -> float:
-        return np.dot(mode_shape, force_vector) / (natural_frequency ** 2 -
-            excitation_frequency_rad_per_s ** 2 + 1j * excitation_frequency_rad_per_s * (
-            stiffness_damping_factor * natural_frequency ** 2 + mass_damping_factor))
+        return np.dot(mode_shape, force_vector) / (
+            natural_frequency_rad_per_s ** 2 - excitation_frequency_rad_per_s ** 2 +
+            1j * excitation_frequency_rad_per_s * (stiffness_damping_factor *
+            natural_frequency_rad_per_s ** 2 + mass_damping_factor))
 
     @staticmethod
     def _free_vibration_results(mesh: Mesh, number_of_modes: int) -> tuple:
