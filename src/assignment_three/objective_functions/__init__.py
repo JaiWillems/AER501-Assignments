@@ -1,0 +1,2 @@
+from src.assignment_three.objective_functions.objective_function_interface import ObjectiveFunctionInterface
+from src.assignment_three.objective_functions.michalewicz_function import MichalewiczFunction2D
