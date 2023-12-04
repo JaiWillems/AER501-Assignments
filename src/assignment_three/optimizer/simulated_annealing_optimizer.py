@@ -25,7 +25,7 @@ class SimulatedAnnealingOptimizer:
         iteration = 0
         temperature = initial_temperature
         best_solution = x0
-        best_cost = objective_function.evaluate(best_solution)
+        best_cost = objective_function.evaluate(best_solution, i=iteration)
 
         while SimulatedAnnealingOptimizer.convergence_criteria_not_met(
                 iteration,
@@ -38,7 +38,7 @@ class SimulatedAnnealingOptimizer:
                 upper_bounds,
                 epsilon
             )
-            current_cost = objective_function.evaluate(current_solution)
+            current_cost = objective_function.evaluate(current_solution, i=iteration)
 
             if SimulatedAnnealingOptimizer.accept_solution(
                     best_cost,

@@ -1,19 +1,18 @@
 import math
 from abc import ABC
 
-from src.assignment_three.objective_functions import ObjectiveFunctionInterface
+from src.assignment_three.objective_functions import BenchmarkObjectiveFunctionInterface
 
 
-class MichalewiczFunction2D(ObjectiveFunctionInterface, ABC):
+class MichalewiczFunction2D(BenchmarkObjectiveFunctionInterface, ABC):
 
-    m = 10
+    def __init__(self, m: float):
+        self._m = m
 
-    @staticmethod
-    def evaluate(x: list) -> float:
+    def evaluate(self, x: list, **kwargs: dict) -> float:
         s = 0
         for i, xi in enumerate(x):
-            s -= math.sin(xi) * math.sin((i + 1) * xi ** 2 / math.pi) ** (
-                    2 * MichalewiczFunction2D.m)
+            s -= math.sin(xi) * math.sin((i + 1) * xi ** 2 / math.pi) ** (2 * self._m)
         return s
 
     @staticmethod

@@ -3,17 +3,15 @@ import abc
 
 class ObjectiveFunctionInterface(metaclass=abc.ABCMeta):
 
-    @staticmethod
     @abc.abstractmethod
-    def evaluate(x: list) -> float:
-        raise NotImplementedError
+    def evaluate(self, x: list, **kwargs: int) -> float:
+        """Evaluate the objective function.
 
-    @staticmethod
-    @abc.abstractmethod
-    def global_optimum() -> list:
-        raise NotImplementedError
-
-    @staticmethod
-    @abc.abstractmethod
-    def global_optimum_value() -> float:
+        :param x: Design vector.
+        :type x: list.
+        :param kwargs: keyword arguments, only option is 'i' for iteration.
+        :type kwargs: dict.
+        :return: Cost value.
+        :rtype float:
+        """
         raise NotImplementedError

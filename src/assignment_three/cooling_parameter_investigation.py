@@ -10,7 +10,7 @@ from src.assignment_three.optimizer import SimulatedAnnealingOptimizer
 X0 = [0, 0]
 LOWER_BOUNDS = [0, 0]
 UPPER_BOUNDS = [math.pi, math.pi]
-OBJECTIVE_FUNCTION = MichalewiczFunction2D
+OBJECTIVE_FUNCTION = MichalewiczFunction2D(10)
 
 MAX_ITERATIONS = 5000
 
